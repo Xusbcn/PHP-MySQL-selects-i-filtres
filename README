@@ -1,0 +1,48 @@
+PHP MSYQL WORLD DATABASE
+Introduction
+
+    programa que consulta la relación de paises y nos devuelve sus ciudades, codigos y banderas.
+
+Code Samples
+
+<?php
+
+     # (1.1) Connectem a MySQL (host,usuari,contrassenya)
+     $conn = mysqli_connect('localhost','xus','xus123');
+
+     # (1.2) Triem la base de dades amb la que treballarem
+     mysqli_select_db($conn, 'world');
+
+     # (2.1) creem el string de la consulta (query)
+     $consulta = "SELECT * FROM country ORDER BY Name ASC;";
+
+     # (2.2) enviem la query al SGBD per obtenir el resultat
+     $resultat = mysqli_query($conn, $consulta);
+
+     # (2.3) si no hi ha resultat (0 files o bé hi ha algun error a la sintaxi)
+     #     posem un missatge d'error i acabem (die) l'execució de la pàgina web
+     if (!$resultat) {
+             $message  = 'Consulta invàlida: ' . mysqli_error() . "\n";
+             $message .= 'Consulta realitzada: ' . $consulta;
+             die($message);
+     }
+ ?>
+
+ <form method='get' action="ej2.php">
+
+ <?php
+     # (3.2) Bucle while
+     echo"<select name='ciutat'>";
+     while( $registre = mysqli_fetch_assoc($resultat) )
+     {
+
+         echo "<option value='".$registre["Code"]."'>".$registre["Name"]."</option>";
+     }
+     echo "</select>";
+ ?>
+
+Installation
+
+    1) Descargamos la base de datos "WORLD.DATABASE" ,desde la pagina de mysql, en la carpeta desde ejecutamos el apache.
+
+2-Creamos dos archivos php, uno para realizar la consulta del del pais y su código, el cual se enviará mediante un $_POST o $_GET a la página 2. En esta segunda pagina podremos ver el resulatdo de la consulta, que será una tabla que muestre la ciudad, el pais y su correspondiente bandera.
